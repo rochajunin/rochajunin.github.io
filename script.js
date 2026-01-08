@@ -135,3 +135,35 @@ const app = {
 };
 
 app.init();
+
+let instaladorPWA; // Variável para guardar o evento
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // 1. Previne que o navegador mostre o prompt automático muito cedo
+    e.preventDefault();
+    // 2. Guarda o evento para ser usado depois
+    instaladorPWA = e;
+    // 3. Mostra o seu botão customizado
+    const btn = document.getElementById('btnInstalar');
+    btn.style.display = 'block';
+
+    btn.addEventListener('click', () => {
+        // 4. Esconde o botão após o clique
+        btn.style.display = 'none';
+        // 5. Mostra o prompt de instalação oficial
+        instaladorPWA.prompt();
+        // 6. Verifica se o usuário aceitou ou recusou
+        instaladorPWA.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Usuário instalou o RockDash!');
+            }
+            instaladorPWA = null;
+        });
+    });
+});
+
+// Esconde o botão se o app já estiver instalado
+window.addEventListener('appinstalled', () => {
+    document.getElementById('btnInstalar').style.display = 'none';
+    console.log('RockDash instalado com sucesso!');
+});
