@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RockDash - PDV</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+</head>
+<body>
+    <header>
+        <h1>RockDash </h1>
+        <nav class="tabs">
+            <button onclick="app.mudarAba('venda')" id="tabVenda" class="active">Venda & Cadastros</button>
+            <button onclick="app.mudarAba('consulta')" id="tabConsulta">Consultar Notas</button>
+        </nav>
+    </header>
+
+    <main>
+        <div id="aba-venda" class="tab-content active">
+            <section class="card">
+                <h2>👤 Clientes e 📦 Produtos</h2>
+                <div class="form-group">
+                    <input type="text" id="cliNome" placeholder="Novo Cliente">
+                    <button onclick="app.salvarCliente()">+ Cliente</button>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="prodNome" placeholder="Produto">
+                    <input type="number" id="prodValor" placeholder="R$" step="0.01">
+                    <button onclick="app.salvarProduto()">+ Produto</button>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>🛒 Realizar Venda</h2>
+                <div class="form-group">
+                    <label>Cliente:</label>
+                    <select id="selectCliente"></select>
+                </div>
+                <div class="form-group">
+                    <select id="selectProduto"></select>
+                    <input type="number" id="vendaQtd" value="1" min="1">
+                    <button onclick="app.adicionarAoCarrinho()" class="btn-add">Adicionar</button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qtd</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaCarrinho"></tbody>
+                    </table>
+                </div>
+                <h3 class="total-destaque" id="totalVenda">Total: R$ 0,00</h3>
+                <button onclick="app.finalizarVenda()" class="btn-confirm">Emitir Nota</button>
+            </section>
+        </div>
+
+        <div id="aba-consulta" class="tab-content">
+            <section class="card">
+                <h2>🔍 Filtros Avançados</h2>
+                <div class="filtros-grid">
+                    <input type="text" id="filtroCliente" placeholder="Nome do Cliente" oninput="app.filtrarNotas()">
+                    <input type="date" id="filtroData" onchange="app.filtrarNotas()">
+                    <input type="time" id="filtroHora" onchange="app.filtrarNotas()">
+                    <button onclick="app.limparFiltros()">Limpar</button>
+                </div>
+            </section>
+            <div id="listaNotasFiltradas"></div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => console.log("PWA Ativo"));
+        }
+    </script>
+</body>
+</html>
